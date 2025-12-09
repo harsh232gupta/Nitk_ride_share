@@ -10,7 +10,7 @@ function Signup() {
         password: '',
         gender: '',
         phone: '',
-        comments: ''
+        telegram: ''
     });
 
     const navigate = useNavigate();
