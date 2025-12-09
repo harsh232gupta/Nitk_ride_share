@@ -24,8 +24,8 @@ const signupValidation = (req, res, next) => {
         email: Joi.string().email().required(),
         password: Joi.string().min(4).max(100).required(),
         gender: Joi.string().valid("Male", "Female", "Other").required(),
-        phone: Joi.string().pattern(/^\d{10}$/).required(),
-        comments: Joi.string().max(500).optional() // Optional field
+        phone: Joi.string().min(10).optional(),
+        telegram: Joi.string().max(500).optional() // Optional field
     });
 
     const { error } = schema.validate(req.body);
