@@ -22,23 +22,29 @@ function Signup() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        const { name, email, password, gender, phone, comments } = signupInfo;
+        const { name, email, password, gender } = signupInfo;
 
-        // Email validation to check if it ends with @nitk.edu.in
+        // Email domain check
         if (!email.endsWith('@nitk.edu.in')) {
             return handleError('Email must be from @nitk.edu.in domain');
         }
 
-        if (!name || !email || !password || !gender || !phone) {
-            return handleError('All fields except comments are required');
+        // Required fields EXCEPT phone, telegram
+        if (!name || !email || !password || !gender) {
+            return handleError('Name, Email, Password and Gender are required');
         }
 
+        // Remove empty optional values before sending
+        const payload = { ...signupInfo };
+        if (payload.phone.trim() === '') delete payload.phone;
+        if (payload.telegram.trim() === '') delete payload.telegram;
+
         try {
-            const url = `http://localhost:8080/auth/signup`;
+            const url = `https://nitk-rideshare-1.onrender.com/auth/signup`;  // <-- FIXED
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(signupInfo)
+                body: JSON.stringify(payload)
             });
 
             const result = await response.json();
@@ -46,7 +52,7 @@ function Signup() {
                 handleSuccess(result.message);
                 setTimeout(() => navigate('/login'), 1000);
             } else {
-                handleError(result.error?.details[0].message || result.message);
+                handleError(result.error?.details?.[0]?.message || result.message);
             }
         } catch (err) {
             handleError('Signup failed, please try again later.');
@@ -57,20 +63,24 @@ function Signup() {
         <div className='container'>
             <h1>Signup</h1>
             <form onSubmit={handleSignup}>
+                
                 <div>
-                    <label htmlFor='name'>Name</label>
-                    <input type='text' name='name' value={signupInfo.name} onChange={handleChange} placeholder='Enter your name...' autoFocus required />
+                    <label>Name</label>
+                    <input type='text' name='name' value={signupInfo.name} onChange={handleChange} required />
                 </div>
+
                 <div>
-                    <label htmlFor='email'>Email</label>
-                    <input type='email' name='email' value={signupInfo.email} onChange={handleChange} placeholder='Enter your email...' required />
+                    <label>Email</label>
+                    <input type='email' name='email' value={signupInfo.email} onChange={handleChange} required />
                 </div>
+
                 <div>
-                    <label htmlFor='password'>Password</label>
-                    <input type='password' name='password' value={signupInfo.password} onChange={handleChange} placeholder='Enter your password...' required />
+                    <label>Password</label>
+                    <input type='password' name='password' value={signupInfo.password} onChange={handleChange} required />
                 </div>
+
                 <div>
-                    <label htmlFor='gender'>Gender</label>
+                    <label>Gender</label>
                     <select name='gender' value={signupInfo.gender} onChange={handleChange} required>
                         <option value=''>Select Gender</option>
                         <option value='Male'>Male</option>
@@ -78,17 +88,21 @@ function Signup() {
                         <option value='Other'>Other</option>
                     </select>
                 </div>
+
                 <div>
-                    <label htmlFor='phone'>Phone Number</label>
-                    <input type='tel' name='phone' value={signupInfo.phone} onChange={handleChange} placeholder='Enter your phone number...' required />
+                    <label>Phone Number (Optional)</label>
+                    <input type='tel' name='phone' value={signupInfo.phone} onChange={handleChange} />
                 </div>
+
                 <div>
-                    <label htmlFor='comments'>Additional Comments (Optional)</label>
-                    <textarea name='comments' value={signupInfo.comments} onChange={handleChange} placeholder='Any additional comments...'></textarea>
+                    <label>Telegram (Optional)</label>
+                    <input type='text' name='telegram' value={signupInfo.telegram} onChange={handleChange} placeholder='Your Telegram ID' />
                 </div>
+
                 <button type='submit'>Signup</button>
                 <span>Already have an account? <Link to="/login">Login</Link></span>
             </form>
+
             <ToastContainer />
         </div>
     );
