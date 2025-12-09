@@ -8,7 +8,15 @@ require('./Models/Db');
 const PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:3000',                // dev
+  'https://nitk-rideshare.vercel.app'      // replace later with real Vercel URL
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 app.get('/ping', (req, res) => {
     res.send('PONG');
