@@ -24,12 +24,13 @@ const UserSchema = new Schema({
     },
     phone: {
         type: String,
-        required: true
+        required: false
       
     },
-    comments: {
+   telegram: {
         type: String,
-        default: ''
+        required: false,
+        trim: true
     }
 }, { timestamps: true });
 
