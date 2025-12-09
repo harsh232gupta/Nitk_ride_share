@@ -15,8 +15,7 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
-        minlength: 6
+        required: true
     },
     gender: {
         type: String,
@@ -25,8 +24,8 @@ const UserSchema = new Schema({
     },
     phone: {
         type: String,
-        required: true,
-        match: [/^\d{10}$/, 'Phone number must be 10 digits']
+        required: true
+      
     },
     comments: {
         type: String,
