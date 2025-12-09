@@ -24,7 +24,7 @@ const signupValidation = (req, res, next) => {
         email: Joi.string().email().required(),
         password: Joi.string().min(4).max(100).required(),
         gender: Joi.string().valid("Male", "Female", "Other").required(),
-        phone: Joi.string().min(10).optional(),
+        phone: Joi.string().allow('').optional(),
         telegram: Joi.string().max(500).optional() // Optional field
     });
 
