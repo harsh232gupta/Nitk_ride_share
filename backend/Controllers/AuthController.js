@@ -4,7 +4,7 @@ const UserModel = require("../Models/User");
 
 const signup = async (req, res) => {
     try {
-        const { name, email, password, gender, phone, comments } = req.body;
+        const { name, email, password, gender, phone, telegram } = req.body;
 
         // 🔹 Check if user already exists
         const existingUser = await UserModel.findOne({ email });
@@ -16,7 +16,7 @@ const signup = async (req, res) => {
         }
 
         // 🔹 Validate required fields
-        if (!name || !email || !password || !gender || !phone) {
+        if (!name || !email || !password || !gender) {
             return res.status(400).json({ 
                 message: 'All fields are required', 
                 success: false 
@@ -41,12 +41,7 @@ const signup = async (req, res) => {
         }
 
         // 🔹 Validate phone number (Must be exactly 10 digits)
-        if (!/^\d{10}$/.test(phone)) {
-            return res.status(400).json({ 
-                message: 'Phone number must be 10 digits', 
-                success: false 
-            });
-        }
+        
 
         // 🔹 Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -58,7 +53,7 @@ const signup = async (req, res) => {
             password: hashedPassword,
             gender,
             phone,
-            comments: comments || "" // Default empty string if not provided
+            telegram: comments || "" // Default empty string if not provided
         });
 
         await newUser.save();
