@@ -25,7 +25,7 @@ const signupValidation = (req, res, next) => {
         password: Joi.string().min(4).max(100).required(),
         gender: Joi.string().valid("Male", "Female", "Other").required(),
         phone: Joi.string().allow('').optional(),
-        telegram: Joi.string().max(500).optional() // Optional field
+        telegram: Joi.string().max(500).optional().allow('')
     });
 
     const { error } = schema.validate(req.body);
